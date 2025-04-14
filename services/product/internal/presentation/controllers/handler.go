@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"ecommerce-microservices/services/product/internal/application/services"
+	"ecommerce-microservices/services/product/internal/domain/models"
 	"encoding/json"
 	"net/http"
 	"strconv"
@@ -45,4 +46,24 @@ func (ph *ProductHandler) GetAllProduct(w http.ResponseWriter, r *http.Request) 
 	}
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(productList)
+}
+
+func (ph *ProductHandler) CreateProduct(w http.ResponseWriter, r *http.Request) {
+
+	var product *models.CreateProductModel
+
+	if err := json.NewDecoder(r.Body).Decode(&product); err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	isSuccess, serviceerr := ph.service.CreateProduct(product)
+
+	if !isSuccess || serviceerr != nil {
+		http.Error(w, "product not created", http.StatusBadRequest)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(isSuccess)
 }

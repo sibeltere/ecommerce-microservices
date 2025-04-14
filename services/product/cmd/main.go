@@ -28,6 +28,7 @@ func main() {
 
 	r.HandleFunc("/products/{id}", productHandler.GetByID).Methods("GET")
 	r.HandleFunc("/products", productHandler.GetAllProduct).Methods("GET")
+	r.HandleFunc("/products", productHandler.CreateProduct).Methods("POST")
 
 	log.Fatal(http.ListenAndServe(":8080", r))
 

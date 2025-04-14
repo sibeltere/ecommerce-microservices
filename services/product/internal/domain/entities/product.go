@@ -1,5 +1,7 @@
 package entities
 
+import "ecommerce-microservices/services/product/internal/domain/models"
+
 type Product struct {
 	Id       int     `json:"id" db:"id"`
 	Name     string  `json:"name" db:"name"`
@@ -10,4 +12,5 @@ type Product struct {
 type Repository interface {
 	GetByID(id int) (*Product, error)
 	GetAllProduct() (*[]Product, error)
+	CreateProduct(productModel *models.CreateProductModel) (bool, error)
 }

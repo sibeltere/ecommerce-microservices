@@ -3,6 +3,7 @@ package postgrerepositories
 import (
 	"database/sql"
 	"ecommerce-microservices/services/product/internal/domain/entities"
+	"ecommerce-microservices/services/product/internal/domain/models"
 
 	"fmt"
 )
@@ -44,4 +45,20 @@ func (repo *ProductPostgresRepository) GetAllProduct() (*[]entities.Product, err
 		productList = append(productList, p)
 	}
 	return &productList, nil
+}
+
+func (repo *ProductPostgresRepository) CreateProduct(productModel *models.CreateProductModel) (bool, error) {
+
+	query := "INSERT INTO Product (Name,Quantity,Price) Values($1,$2,$3)"
+
+	rows, err := repo.db.Exec(query, productModel.Name, productModel.Quantity, productModel.Price)
+	if err != nil {
+		return false, fmt.Errorf("fail for insert %v", err)
+	}
+	effectedRows, er := rows.RowsAffected()
+
+	if effectedRows < 0 || er != nil {
+		return false, fmt.Errorf("fail for insert %v", err)
+	}
+	return true, nil
 }
