@@ -67,3 +67,62 @@ func (ph *ProductHandler) CreateProduct(w http.ResponseWriter, r *http.Request) 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(isSuccess)
 }
+
+func (ph *ProductHandler) UpdateProduct(w http.ResponseWriter, r *http.Request) {
+	var product *models.UpdateProductModel
+
+	variables := mux.Vars(r)
+	idStr := variables["id"]
+
+	id, _ := strconv.Atoi(idStr)
+
+	//firstly get a product Is it exits?
+	existingProduct, err := ph.service.GetByID(id)
+
+	if existingProduct == nil || err != nil {
+		http.Error(w, "product not found", http.StatusNotFound)
+		return
+	}
+
+	//now you can parse your request to product
+	if er := json.NewDecoder(r.Body).Decode(&product); er != nil {
+		http.Error(w, "product model is not readable", http.StatusBadRequest)
+		return
+	}
+
+	isSuccess, serviceerr := ph.service.UpdateProduct(product, id)
+
+	if !isSuccess || serviceerr != nil {
+		http.Error(w, "product not updated", http.StatusBadRequest)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(isSuccess)
+
+}
+
+func (ph *ProductHandler) DeleteProuct(w http.ResponseWriter, r *http.Request) {
+	variables := mux.Vars(r)
+	IdStr := variables["id"]
+	Id, _ := strconv.Atoi(IdStr)
+
+	//firstly get a product Is it exits?
+	existingProduct, err := ph.service.GetByID(Id)
+
+	if existingProduct == nil || err != nil {
+		http.Error(w, "product not found", http.StatusNotFound)
+		return
+	}
+
+	isSuccess, serviceerr := ph.service.DeleteProuct(Id)
+
+	if !isSuccess || serviceerr != nil {
+		http.Error(w, "product not deleted", http.StatusBadRequest)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(isSuccess)
+
+}

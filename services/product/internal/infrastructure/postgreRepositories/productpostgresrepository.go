@@ -47,11 +47,11 @@ func (repo *ProductPostgresRepository) GetAllProduct() (*[]entities.Product, err
 	return &productList, nil
 }
 
-func (repo *ProductPostgresRepository) CreateProduct(productModel *models.CreateProductModel) (bool, error) {
+func (repo *ProductPostgresRepository) CreateProduct(createModel *models.CreateProductModel) (bool, error) {
 
 	query := "INSERT INTO Product (Name,Quantity,Price) Values($1,$2,$3)"
 
-	rows, err := repo.db.Exec(query, productModel.Name, productModel.Quantity, productModel.Price)
+	rows, err := repo.db.Exec(query, createModel.Name, createModel.Quantity, createModel.Price)
 	if err != nil {
 		return false, fmt.Errorf("fail for insert %v", err)
 	}
@@ -60,5 +60,40 @@ func (repo *ProductPostgresRepository) CreateProduct(productModel *models.Create
 	if effectedRows < 0 || er != nil {
 		return false, fmt.Errorf("fail for insert %v", err)
 	}
+	return true, nil
+}
+
+func (repo *ProductPostgresRepository) UpdateProduct(updateModel *models.UpdateProductModel, Id int) (bool, error) {
+
+	query := "UPDATE Product SET Name=$1,Quantity=$2,Price=$3 WHERE Id=$4"
+
+	rows, err := repo.db.Exec(query, updateModel.Name, updateModel.Quantity, updateModel.Price, Id)
+
+	if err != nil {
+		return false, fmt.Errorf("fail for update %v", err)
+	}
+
+	effectedRows, er := rows.RowsAffected()
+
+	if effectedRows < 0 || er != nil {
+		return false, fmt.Errorf("fail for update %v", err)
+	}
+	return true, nil
+}
+
+func (repo *ProductPostgresRepository) DeleteProuct(Id int) (bool, error) {
+
+	query := "DELETE FROM Product Where Id=$1"
+	rows, err := repo.db.Exec(query, Id)
+	if err != nil {
+		return false, fmt.Errorf("fail for delete %v", err)
+	}
+
+	effectedRows, er := rows.RowsAffected()
+
+	if effectedRows < 0 || er != nil {
+		return false, fmt.Errorf("fail for delete %v", err)
+	}
+
 	return true, nil
 }

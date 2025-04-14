@@ -29,6 +29,8 @@ func main() {
 	r.HandleFunc("/products/{id}", productHandler.GetByID).Methods("GET")
 	r.HandleFunc("/products", productHandler.GetAllProduct).Methods("GET")
 	r.HandleFunc("/products", productHandler.CreateProduct).Methods("POST")
+	r.HandleFunc("/products/{id}", productHandler.UpdateProduct).Methods("PUT")
+	r.HandleFunc("/products/{id}", productHandler.DeleteProuct).Methods("DELETE")
 
 	log.Fatal(http.ListenAndServe(":8080", r))
 

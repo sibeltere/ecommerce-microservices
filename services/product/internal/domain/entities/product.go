@@ -12,5 +12,7 @@ type Product struct {
 type Repository interface {
 	GetByID(id int) (*Product, error)
 	GetAllProduct() (*[]Product, error)
-	CreateProduct(productModel *models.CreateProductModel) (bool, error)
+	CreateProduct(createModel *models.CreateProductModel) (bool, error)
+	UpdateProduct(updateModel *models.UpdateProductModel, Id int) (bool, error)
+	DeleteProuct(Id int) (bool, error)
 }

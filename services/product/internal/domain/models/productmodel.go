@@ -5,3 +5,9 @@ type CreateProductModel struct {
 	Quantity int
 	Price    int
 }
+
+type UpdateProductModel struct {
+	Name     string
+	Quantity int
+	Price    int
+}

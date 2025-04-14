@@ -21,6 +21,14 @@ func (s *ProductService) GetAllProduct() (*[]entities.Product, error) {
 	return s.productRepository.GetAllProduct()
 }
 
-func (s *ProductService) CreateProduct(productModel *models.CreateProductModel) (bool, error) {
-	return s.productRepository.CreateProduct(productModel)
+func (s *ProductService) CreateProduct(createModel *models.CreateProductModel) (bool, error) {
+	return s.productRepository.CreateProduct(createModel)
+}
+
+func (s *ProductService) UpdateProduct(updateModel *models.UpdateProductModel, Id int) (bool, error) {
+	return s.productRepository.UpdateProduct(updateModel, Id)
+}
+
+func (s *ProductService) DeleteProuct(Id int) (bool, error) {
+	return s.productRepository.DeleteProuct(Id)
 }
