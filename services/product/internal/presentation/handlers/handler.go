@@ -1,4 +1,4 @@
-package controllers
+package handlers
 
 import (
 	"ecommerce-microservices/services/product/internal/application/services"
