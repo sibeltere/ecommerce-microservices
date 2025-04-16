@@ -13,6 +13,15 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+  nats:
+    image: nats:latest
+    ports:
+      - "4222:4222"
+      - "8222:8222"
+    command: [
+      "-js",
+      "-m", "8222"
+    ]    
 
 
 volumes:
