@@ -3,16 +3,20 @@ package services
 import (
 	"ecommerce-microservices/services/product/internal/domain/entities"
 	"ecommerce-microservices/services/product/internal/domain/models"
-	"ecommerce-microservices/services/product/internal/infrastructure/nats"
 	"fmt"
 )
 
-type ProductService struct {
-	productRepository entities.Repository
+type EventPublisher interface {
+	Publish(subject string, data any) (bool, error)
 }
 
-func NewService(repo entities.Repository) *ProductService {
-	return &ProductService{productRepository: repo}
+type ProductService struct {
+	productRepository entities.Repository
+	publisher         EventPublisher
+}
+
+func NewService(repo entities.Repository, publisher EventPublisher) *ProductService {
+	return &ProductService{productRepository: repo, publisher: publisher}
 }
 
 func (s *ProductService) GetByID(id int) (*entities.Product, error) {
@@ -30,7 +34,7 @@ func (s *ProductService) CreateProduct(createModel *models.CreateProductModel) (
 	}
 
 	//publish message by nats
-	nats.PublishProduct(createModel)
+	s.publisher.Publish("products.created", createModel)
 	return result, nil
 }
 
