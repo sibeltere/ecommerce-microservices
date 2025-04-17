@@ -1,6 +1,6 @@
 package entities
 
-import "ecommerce-microservices/services/product/internal/domain/models"
+import "productservice/internal/domain/models"
 
 type Product struct {
 	Id       int     `json:"id" db:"id"`

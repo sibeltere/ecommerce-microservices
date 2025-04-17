@@ -1,10 +1,10 @@
 package handlers
 
 import (
-	"ecommerce-microservices/services/product/internal/application/services"
-	"ecommerce-microservices/services/product/internal/domain/models"
 	"encoding/json"
 	"net/http"
+	"productservice/internal/application/services"
+	"productservice/internal/domain/models"
 	"strconv"
 
 	"github.com/gorilla/mux"

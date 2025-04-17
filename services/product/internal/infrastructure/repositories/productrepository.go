@@ -2,8 +2,8 @@ package repositories
 
 import (
 	"database/sql"
-	"ecommerce-microservices/services/product/internal/domain/entities"
-	"ecommerce-microservices/services/product/internal/domain/models"
+	"productservice/internal/domain/entities"
+	"productservice/internal/domain/models"
 
 	"fmt"
 )

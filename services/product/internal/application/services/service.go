@@ -1,9 +1,9 @@
 package services
 
 import (
-	"ecommerce-microservices/services/product/internal/domain/entities"
-	"ecommerce-microservices/services/product/internal/domain/models"
 	"fmt"
+	"productservice/internal/domain/entities"
+	"productservice/internal/domain/models"
 )
 
 type EventPublisher interface {

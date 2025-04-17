@@ -1,6 +1,38 @@
 version: '3.8'
-
 services:
+  product:
+    build:
+      context: ./services/product
+      dockerfile: Dockerfile
+    environment:
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+      - DB_NAME=ecommerce
+      - NATS_URL=nats://nats:4222
+    ports:
+      - "50050:50050"
+    depends_on:
+      - postgres
+      - nats
+
+
+# Order Service
+  order:
+    build:
+     context: ./services/order
+     dockerfile: Dockerfile
+    ports:
+      - "50051:50051"
+    environment:
+      - MONGO_URI=mongodb://admin:secret@mongo:27017/orderdb
+      - NATS_URL=nats://nats:4222
+    depends_on:
+      - mongo
+      - nats
+
+# PostgreSQL
   postgres:
     image: postgres:15
     container_name: postgres-db
@@ -11,18 +43,35 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: ecommerce
     volumes:
-      - pgdata:/var/lib/postgresql/data
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+     - pgdata:/var/lib/postgresql/data
+     - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+
+# MongoDB
+  mongo:
+    image: mongo:7
+    container_name: order-mongo
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: secret
+    volumes:
+      - mongodata:/data/db
+
+# NATS
+
   nats:
     image: nats:latest
+    container_name: nats
     ports:
-      - "4222:4222"
-      - "8222:8222"
+      - "4222:4222"  # client port
+      - "8222:8222"  # monitoring UI
     command: [
       "-js",
       "-m", "8222"
-    ]    
+    ]
 
 
 volumes:
-  pgdata:
+ pgdata:
+ mongodata:

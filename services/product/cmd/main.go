@@ -1,14 +1,14 @@
 package main
 
 import (
-	"ecommerce-microservices/services/product/internal/application/services"
-	"ecommerce-microservices/services/product/internal/core/storage"
-	natsinfra "ecommerce-microservices/services/product/internal/infrastructure/nats"
-	"ecommerce-microservices/services/product/internal/infrastructure/repositories"
-	"ecommerce-microservices/services/product/internal/presentation/handlers"
 	"fmt"
 	"log"
 	"net/http"
+	"productservice/internal/application/services"
+	"productservice/internal/core/storage"
+	natsinfra "productservice/internal/infrastructure/nats"
+	"productservice/internal/infrastructure/repositories"
+	"productservice/internal/presentation/handlers"
 
 	"github.com/gorilla/mux"
 	"github.com/nats-io/nats.go"
@@ -37,6 +37,7 @@ func main() {
 	r.HandleFunc("/products/{id}", productHandler.UpdateProduct).Methods("PUT")
 	r.HandleFunc("/products/{id}", productHandler.DeleteProuct).Methods("DELETE")
 
-	log.Fatal(http.ListenAndServe(":8080", r))
+	log.Println("Products service is running on port 50050")
+	log.Fatal(http.ListenAndServe(":50050", r))
 
 }
